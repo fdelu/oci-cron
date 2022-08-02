@@ -12,7 +12,16 @@ KEY_FINGERPRINT = os.environ.get("FINGERPRINT")
 TENACY = os.environ.get("TENACY")
 USER = os.environ.get("USER")
 
+TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT")
+
 MEMORY_PER_CPU = 6
+DONE_CODE = "Out of host capacity."
+
+TELEGRAM_MESSAGE = (
+    "*OCI\\-Cron Function got a different response:*\n" "```json\n" "{}\n```"
+)
+NO_NOTIF_CODES = ["LimitExceeded", "InternalError", "TooManyRequests"]
 
 
 def fill_payload(cfg):
@@ -28,6 +37,26 @@ def fill_payload(cfg):
     cpu = int(os.environ.get("VM_CPU_COUNT"))
     cfg["shapeConfig"]["ocpus"] = cpu
     cfg["shapeConfig"]["memoryInGBs"] = cpu * MEMORY_PER_CPU
+
+
+def notify(response):
+    if (
+        response.code != 200
+        or TELEGRAM_TOKEN is None
+        or response.json().get("code") in NO_NOTIF_CODES
+    ):
+        return
+
+    print("Got different response, notifying...")
+    res = requests.post(
+        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+        json={
+            "chat_id": TELEGRAM_CHAT_ID,
+            "text": TELEGRAM_MESSAGE.format(response.text),
+            "parse_mode": "MarkdownV2",
+        },
+    )
+    print("Notification result: ", res.json())
 
 
 def handler(event, context):
@@ -47,7 +76,9 @@ def handler(event, context):
         "https://iaas.sa-saopaulo-1.oraclecloud.com/20160918/instances/",
         auth=signer,
         json=payload,
-    ).json()
+    )
 
-    print(f"Response: {response}")
-    return {"statusCode": 200, "body": json.dumps(response)}
+    print(f"Response: {response.json()}")
+    notify(response)
+
+    return {"statusCode": 200, "body": response.text}
