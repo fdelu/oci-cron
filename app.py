@@ -4,14 +4,30 @@ import os
 import json
 
 DIR = os.path.dirname(os.path.abspath(__file__))
-
-PAYLOAD_FILE =  f"{DIR}/payload.json"
+PAYLOAD_FILE = f"{DIR}/payload.json"
 KEY_FILE = f"/tmp/key.pem"
+
 KEY = os.environ.get("KEY").replace("\\n", "\n")
-KEY_FINGERPRINT = "af:1f:c4:da:34:ff:22:02:30:fc:97:f3:20:5a:2f:2d"
-TENACY = "ocid1.tenancy.oc1..aaaaaaaaozrv4ilyferxbg2rdek5klfdewdy6tlkocwtbpnpkmrk2j6pz5tq"  # noqa
-REGION = "sa-saopaulo-1"
-USER = "ocid1.user.oc1..aaaaaaaays2rpdcslmlqcbofop2qf77r4a4zs2xyhykzijpic6y2byc7qwfa"
+KEY_FINGERPRINT = os.environ.get("FINGERPRINT")
+TENACY = os.environ.get("TENACY")
+USER = os.environ.get("USER")
+
+MEMORY_PER_CPU = 6
+
+
+def fill_payload(cfg):
+    cfg["metadata"]["ssh_authorized_keys"] = os.environ.get("VM_SSH")
+    cfg["compartmentId"] = os.environ.get("VM_COMPARTMENT")
+    cfg["displayName"] = os.environ.get("VM_NAME")
+    cfg["availabilityDomain"] = os.environ.get("VM_DOMAIN")
+    cfg["sourceDetails"]["imageId"] = os.environ.get("VM_BOOT_IMAGE")
+    cfg["sourceDetails"]["bootVolumeSizeInGBs"] = int(
+        os.environ.get("VM_BOOT_VOL_SIZE")
+    )
+    cfg["createVnicDetails"]["subnetId"] = os.environ.get("VM_SUBNET")
+    cpu = int(os.environ.get("VM_CPU_COUNT"))
+    cfg["shapeConfig"]["ocpus"] = cpu
+    cfg["shapeConfig"]["memoryInGBs"] = cpu * MEMORY_PER_CPU
 
 
 def handler(event, context):
@@ -24,6 +40,7 @@ def handler(event, context):
     with open(PAYLOAD_FILE, "r") as f:
         payload = json.load(f)
 
+    fill_payload(payload)
     print("Got payload & key")
 
     response = requests.post(

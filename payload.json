@@ -1,20 +1,20 @@
 {
     "metadata": {
-        "ssh_authorized_keys": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDYMOjpEwEL1gsY+KZ0EujZ1wClk5uPKqq8+H7/zusXa8JdvlaF1OQljXD+yHwyjPCKzrOIFcbEL8wdZMtbMPqSD2QOj3gho2KMjzKPijsZ655JTMcxjwz7AWDq4a8kmo6qKfJR4zAs7f49+y2ko50AC2xX875u/G0hxAjQxtiiUzb4qro6jYUmow+UGgJ9FRuaX/y3cORcjv62xizVTFeLY9+A/gtS4xv0rR+ecarjNJfQ0lSOWG2vTHCr9BNPAx9AO4WAK3gKbqjt1Uv+ijCoXEJ+AqjjyFvrFAZxRUvtlxxA03+aCCOLy8HtsKxxfPa93nBlYnF3cqDBGykrHQMN rsa-key-20220802"
+        "ssh_authorized_keys": ""
     },
     "shape": "VM.Standard.A1.Flex",
-    "compartmentId": "ocid1.tenancy.oc1..aaaaaaaaozrv4ilyferxbg2rdek5klfdewdy6tlkocwtbpnpkmrk2j6pz5tq",
-    "displayName": "delu-vm",
-    "availabilityDomain": "FiOZ:SA-SAOPAULO-1-AD-1",
+    "compartmentId": "",
+    "displayName": "",
+    "availabilityDomain": "",
     "sourceDetails": {
         "sourceType": "image",
-        "imageId": "ocid1.image.oc1.sa-saopaulo-1.aaaaaaaafl5tljzvlebqvrgs4nog6mg7n6indhgd6lzdxmtunsey735htmfa",
-        "bootVolumeSizeInGBs": 150,
+        "imageId": "",
+        "bootVolumeSizeInGBs": 0,
         "bootVolumeVpusPerGB": 20
     },
     "createVnicDetails": {
         "assignPublicIp": true,
-        "subnetId": "ocid1.subnet.oc1.sa-saopaulo-1.aaaaaaaa7yo6ksatyw67wdw3e4nhtw3z34g5vhtk6mu7zy6xz274pfitlyfa",
+        "subnetId": "",
         "assignPrivateDnsRecord": true
     },
     "agentConfig": {
@@ -64,7 +64,7 @@
         "recoveryAction": "RESTORE_INSTANCE"
     },
     "shapeConfig": {
-        "ocpus": 4,
-        "memoryInGBs": 24
+        "ocpus": 0,
+        "memoryInGBs": 0
     }
 }
