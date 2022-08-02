@@ -41,7 +41,7 @@ def fill_payload(cfg):
 
 def notify(response):
     if (
-        response.code != 200
+        response.status_code != 200
         or TELEGRAM_TOKEN is None
         or response.json().get("code") in NO_NOTIF_CODES
     ):
