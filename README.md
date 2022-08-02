@@ -18,6 +18,12 @@
 - `VM_COMPARTMENT`: Compartment ID
 - `VM_DOMAIN`: Availability Domain ID
 - `VM_CPU_COUNT`: Amount of CPUs. Memory will be 6 times this amount.
+- `TELEGRAM_TOKEN`: (optional) Telegram bot token to send a notification when done.
+- `TELEGRAM_CHAT`: (optional) Telegram chat id where the notification is sent.
+
+> In order to get a notification, you must have started a chat with the bot before.
+
+> You can get your telegram's chat id by sending a message to the bot `@userinfobot`.
 
 # Run locally
 
