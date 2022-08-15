@@ -1,12 +1,17 @@
 # AWS Lambda Function - Cron triggered Oracle Ampere VM creation
 
+Uses Oracle Cloud REST API to create an Ampere instance. The instances are usually out of stock, so this was created in order to run every minute on an AWS Lambda Function until it succeeds.
+
+Once the instance it created, the user is notified via Telegram.
+
 # Build
 
 `docker build -t oci-cron .`
 
 # Environment variables
+You can get most of this values by attempting to create an instance manually and looking into the payload of the packet that is sent.
 
-- `KEY`: Oracle cloud API Key file content, replacing new lines with `\n`
+- `KEY`: Oracle cloud API Key file content. Replace new lines with the literal `\n`
 - `KEY_FINGERPRINT`: Oracle cloud API Key fingerprint
 - `TENACY`: Oracle cloud tenacy
 - `USER`: Oracle cloud user
@@ -23,23 +28,24 @@
 
 > In order to get a notification, you must have started a chat with the bot before.
 
-> You can get your telegram's chat id by sending a message to the bot `@userinfobot`.
+> You can get your Telegram's chat id by sending a message to the bot `@userinfobot`.
 
 # Run locally
 
-Add the `KEY` environment variable to the file `.env`.
+Add the environment variables to a file named `.env`.
 
-On two separate consoles, run:
+On two separate terminals, run:
 
 - `docker run --env-file .env -p 9000:8080 oci-cron`
 - `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'`
 
-# Push to repo
+# Push to repository
+Use this commands to push to an AWS repository in order to deploy the function
 
-- `docker tag oci-cron 670394663789.dkr.ecr.sa-east-1.amazonaws.com/oci-cron:{VERSION HERE}`
-- `docker push 670394663789.dkr.ecr.sa-east-1.amazonaws.com/oci-cron:{VERSION HERE}`
+- `docker tag oci-cron {REPO_URL}:{VERSION HERE}`
+- `docker push {REPO_URL}:{VERSION HERE}`
 
 # Deploying
 
-- Deploy the image from the repo and increase the memory, or else the function will time out.
-- Add `EventBridge (CloudWatch Events)` trigger to run every 5m
+- Deploy the image from the repository and increase the memory (tested with 1GB), or else the function will time out.
+- Add an `EventBridge (CloudWatch Events)` trigger to run every minute
