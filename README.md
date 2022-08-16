@@ -4,11 +4,14 @@ Uses Oracle Cloud REST API to create an Ampere instance. The instances are usual
 
 Once the instance it created, the user is notified via Telegram.
 
+> The code is set up for accounts in Sao Paulo. Change the POST_URL constant if needed.
+
 # Build
 
 `docker build -t oci-cron .`
 
 # Environment variables
+
 You can get most of this values by attempting to create an instance manually and looking into the payload of the packet that is sent.
 
 - `KEY`: Oracle cloud API Key file content. Replace new lines with the literal `\n`
@@ -39,7 +42,8 @@ On two separate terminals, run:
 - `docker run --env-file .env -p 9000:8080 oci-cron`
 - `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'`
 
-# Push to repository
+# Pushing to AWS repository
+
 Use this commands to push to an AWS repository in order to deploy the function
 
 - `docker tag oci-cron {REPO_URL}:{VERSION HERE}`
@@ -47,5 +51,6 @@ Use this commands to push to an AWS repository in order to deploy the function
 
 # Deploying
 
-- Deploy the image from the repository and increase the memory (tested with 1GB), or else the function will time out.
+- Deploy the image from the repository
+- Increase the memory (tested with 1GB), or else the function will time out.
 - Add an `EventBridge (CloudWatch Events)` trigger to run every minute

@@ -14,9 +14,11 @@ USER = os.environ.get("USER")
 
 TELEGRAM_TOKEN = os.environ.get("TELEGRAM_TOKEN")
 TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT")
-
+TELEGRAM_URL = f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage"
 MEMORY_PER_CPU = 6
 DONE_CODE = "Out of host capacity."
+
+POST_URL = "https://iaas.sa-saopaulo-1.oraclecloud.com/20160918/instances/"
 
 TELEGRAM_MESSAGE = (
     "*OCI\\-Cron Function got a different response:*\n" "```json\n" "{}\n```"
@@ -49,7 +51,7 @@ def notify(response):
 
     print("Got different response, notifying...")
     res = requests.post(
-        f"https://api.telegram.org/bot{TELEGRAM_TOKEN}/sendMessage",
+        TELEGRAM_URL,
         json={
             "chat_id": TELEGRAM_CHAT_ID,
             "text": TELEGRAM_MESSAGE.format(response.text),
@@ -73,7 +75,7 @@ def handler(event, context):
     print("Got payload & key")
 
     response = requests.post(
-        "https://iaas.sa-saopaulo-1.oraclecloud.com/20160918/instances/",
+        POST_URL,
         auth=signer,
         json=payload,
     )
