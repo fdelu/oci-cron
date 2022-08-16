@@ -1,6 +1,6 @@
-# AWS Lambda Function - Cron triggered Oracle Ampere VM creation
+# Function - Cron triggered Oracle Ampere VM creation
 
-Uses Oracle Cloud REST API to create an Ampere instance. The instances are usually out of stock, so this was created in order to run every minute on an AWS Lambda Function until it succeeds.
+Uses Oracle Cloud REST API to create an Ampere instance. The instances are usually out of stock, so this was created in order to run every minute on an Function (AWS Lambda, or OCI Functions) until it succeeds.
 
 Once the instance it created, the user is notified via Telegram.
 
@@ -42,9 +42,9 @@ On two separate terminals, run:
 - `docker run --env-file .env -p 9000:8080 oci-cron`
 - `curl -XPOST "http://localhost:9000/2015-03-31/functions/function/invocations" -d '{}'`
 
-# Pushing to AWS repository
+# Pushing to repository
 
-Use this commands to push to an AWS repository in order to deploy the function
+Use this commands to push to a repository in order to deploy the function
 
 - `docker tag oci-cron {REPO_URL}:{VERSION HERE}`
 - `docker push {REPO_URL}:{VERSION HERE}`
@@ -53,4 +53,4 @@ Use this commands to push to an AWS repository in order to deploy the function
 
 - Deploy the image from the repository
 - Increase the memory (tested with 1GB), or else the function will time out.
-- Add an `EventBridge (CloudWatch Events)` trigger to run every minute
+- Add a trigger to run every minute
